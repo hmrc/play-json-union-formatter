@@ -46,13 +46,13 @@ class UnionSpec extends WordSpec with Matchers {
   "Union.format w/ toJson" should {
 
     "serialise a member of the union type with the correct type field" in {
-      Json.toJson(MemberOne(10)) \ "typeField" shouldBe JsString("ONE")
-      Json.toJson(MemberTwo("10")) \ "typeField" shouldBe JsString("TWO")
+      Json.toJson(MemberOne(10)) \ "typeField" shouldBe JsDefined(JsString("ONE"))
+      Json.toJson(MemberTwo("10")) \ "typeField" shouldBe JsDefined(JsString("TWO"))
     }
 
     "serialise a member of the union type with the right fields" in {
-      Json.toJson(MemberOne(10)) \ "fieldOne" shouldBe JsNumber(10)
-      Json.toJson(MemberTwo("10")) \ "fieldTwo" shouldBe JsString("10")
+      Json.toJson(MemberOne(10)) \ "fieldOne" shouldBe JsDefined(JsNumber(10))
+      Json.toJson(MemberTwo("10")) \ "fieldTwo" shouldBe JsDefined(JsString("10"))
     }
 
   }

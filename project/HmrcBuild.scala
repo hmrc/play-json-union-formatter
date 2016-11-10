@@ -44,11 +44,9 @@ object HmrcBuild extends Build {
 
 private object AppDependencies {
 
-
-  val playJsonVersion = "2.3.10"
-
-  val scalaTestVersion = "2.2.4"
-  val pegdownVersion = "1.5.0"
+  val playJsonVersion = "2.5.8"
+  val scalaTestVersion = "2.2.6"
+  val pegdownVersion = "1.6.0"
 
   val compile = Seq(
     "com.typesafe.play" %% "play-json" % playJsonVersion
