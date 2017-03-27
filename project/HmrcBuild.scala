@@ -44,7 +44,7 @@ object HmrcBuild extends Build {
 
 private object AppDependencies {
 
-  val playJsonVersion = "2.5.8"
+  val playJsonVersion = "2.5.12"
   val scalaTestVersion = "2.2.6"
   val pegdownVersion = "1.6.0"
 
