@@ -32,10 +32,9 @@ lazy val library = (project in file("."))
     targetJvm := "jvm-1.8",
     crossScalaVersions := Seq("2.11.11"),
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play"      % "2.5.12" % "provided",
-      "org.scalatest"     %% "scalatest" % "3.0.4"  % "test",
-      "uk.gov.hmrc"       %% "hmrctest"  % "2.3.0"  % "test",
-      "com.typesafe.play" %% "play-json" % "2.6.9",
+      "org.scalatest"     %% "scalatest" % "3.0.5"  % "test",
+      "uk.gov.hmrc"       %% "hmrctest"  % "3.1.0"  % "test",
+      "com.typesafe.play" %% "play-json" % "2.5.15",
       "org.scalatest" %% "scalatest" % "3.0.5" % "test"
     ),
     resolvers := Seq(
