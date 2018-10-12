@@ -36,8 +36,7 @@ lazy val library = (project in file("."))
       "org.scalatest"     %% "scalatest" % "3.0.4"  % "test",
       "uk.gov.hmrc"       %% "hmrctest"  % "2.3.0"  % "test",
       "com.typesafe.play" %% "play-json" % "2.6.9",
-      "org.scalatest" %% "scalatest" % "3.0.5" % "test",
-      "org.pegdown" % "pegdown" % "1.6.0" % "test"
+      "org.scalatest" %% "scalatest" % "3.0.5" % "test"
     ),
     resolvers := Seq(
       Resolver.bintrayRepo("hmrc", "releases")
