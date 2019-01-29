@@ -33,7 +33,7 @@ lazy val library = (project in file("."))
     crossScalaVersions := Seq("2.11.11"),
     libraryDependencies ++= Seq(
       "org.scalatest"     %% "scalatest" % "3.0.5"  % "test",
-      "uk.gov.hmrc"       %% "hmrctest"  % "3.1.0"  % "test",
+      "uk.gov.hmrc"       %% "hmrctest"  % "3.3.0"  % "test",
       "com.typesafe.play" %% "play-json" % "2.5.15",
       "org.scalatest" %% "scalatest" % "3.0.5" % "test"
     ),
