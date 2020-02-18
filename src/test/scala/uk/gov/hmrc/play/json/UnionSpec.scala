@@ -17,7 +17,6 @@
 package uk.gov.hmrc.play.json
 
 import org.scalatest.{Matchers, WordSpec}
-import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
 
@@ -106,7 +105,7 @@ class UnionSpec extends WordSpec with Matchers {
 
       val typePath = __ \ "typeField"
 
-      Json.fromJson[UnionType](json) shouldBe JsError(Seq(typePath -> Seq(ValidationError("THREE is not a recognised typeField"))))
+      Json.fromJson[UnionType](json) shouldBe JsError(typePath, "THREE is not a recognised typeField")
     }
   }
 }

@@ -25,16 +25,15 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(
-    scalaVersion := "2.11.11",
+    scalaVersion := "2.12.10",
     name := "play-json-union-formatter",
     majorVersion := 1,
     makePublicallyAvailableOnBintray := true,
     targetJvm := "jvm-1.8",
-    crossScalaVersions := Seq("2.11.11"),
     libraryDependencies ++= Seq(
       "org.scalatest"     %% "scalatest" % "3.0.8"  % "test",
-      "uk.gov.hmrc"       %% "hmrctest"  % "3.9.0-play-25"  % "test",
-      "com.typesafe.play" %% "play-json" % "2.5.19"
+      "uk.gov.hmrc"       %% "hmrctest"  % "3.9.0-play-26"  % "test",
+      "com.typesafe.play" %% "play-json" % "2.6.14"
     ),
     resolvers := Seq(
       Resolver.bintrayRepo("hmrc", "releases")
