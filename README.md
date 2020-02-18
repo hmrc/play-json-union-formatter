@@ -1,6 +1,6 @@
 # play-json-union-formatter
 
-[![Build Status](https://travis-ci.org/hmrc/play-json-union-formatter.svg?branch=master)](https://travis-ci.org/hmrc/play-json-union-formatter) [ ![Download](https://api.bintray.com/packages/hmrc/releases/play-json-union-formatter/images/download.svg) ](https://bintray.com/hmrc/releases/play-json-union-formatter/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/hmrc/releases/play-json-union-formatter/images/download.svg) ](https://bintray.com/hmrc/releases/play-json-union-formatter/_latestVersion)
 
 A library for deriving a play-json formatter for a JSON-encoded [tagged union](https://en.wikipedia.org/wiki/Tagged_union).
 
