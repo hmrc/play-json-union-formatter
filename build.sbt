@@ -26,12 +26,12 @@ lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
-    scalaVersion := "2.11.11",
+    scalaVersion := "2.11.12",
     name := "play-json-union-formatter",
     majorVersion := 1,
     makePublicallyAvailableOnBintray := true,
     targetJvm := "jvm-1.8",
-    crossScalaVersions := Seq("2.11.11", "2.12.10"),
+    crossScalaVersions := Seq("2.11.12", "2.12.8"),
     libraryDependencies ++= deps,
     resolvers := Seq(
       Resolver.bintrayRepo("hmrc", "releases")
