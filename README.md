@@ -14,6 +14,8 @@ resolvers += Resolver.bintrayRepo("hmrc", "releases")
 libraryDependencies += "uk.gov.hmrc" %% "play-json-union-formatter" % "x.x.x"
 ```
 
+If your microservice is using Play 2.5, use version 1.7.0 or older. Versions > 1.7.0 only support Play 2.6
+
 ## Usage
 
 In a given JSON payload, you may want to capture a field or array that contains a set of hetrogeneous types. 
