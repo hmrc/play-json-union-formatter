@@ -24,18 +24,39 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 
 lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
+  .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.11.11",
     name := "play-json-union-formatter",
     majorVersion := 1,
     makePublicallyAvailableOnBintray := true,
     targetJvm := "jvm-1.8",
-    libraryDependencies ++= Seq(
-      "org.scalatest"     %% "scalatest" % "3.0.8"  % "test",
-      "uk.gov.hmrc"       %% "hmrctest"  % "3.9.0-play-26"  % "test",
-      "com.typesafe.play" %% "play-json" % "2.6.14"
-    ),
+    crossScalaVersions := Seq("2.11.11", "2.12.10"),
+    libraryDependencies ++= deps,
     resolvers := Seq(
       Resolver.bintrayRepo("hmrc", "releases")
     )
   )
+
+val compileDepsPlay25: Seq[ModuleID] = Seq(
+  "com.typesafe.play" %% "play-json" % "2.5.19"
+)
+
+val testDepsPlay25: Seq[ModuleID] = Seq(
+  "uk.gov.hmrc"       %% "hmrctest"  % "3.9.0-play-25"  % "test",
+  "org.scalatest"     %% "scalatest" % "2.2.5"  % "test"
+)
+
+val compileDepsPlay26: Seq[ModuleID] = Seq(
+  "com.typesafe.play" %% "play-json" % "2.6.14"
+)
+
+val testDepsPlay26: Seq[ModuleID] = Seq(
+  "org.scalatest"     %% "scalatest" % "3.0.8"  % "test",
+  "uk.gov.hmrc"       %% "hmrctest"  % "3.9.0-play-26"  % "test"
+)
+
+val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
+  play25 = compileDepsPlay25 ++ testDepsPlay25,
+  play26 = compileDepsPlay26 ++ testDepsPlay26
+)
