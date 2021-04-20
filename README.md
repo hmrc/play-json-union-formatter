@@ -1,7 +1,5 @@
 # play-json-union-formatter
 
-[ ![Download](https://api.bintray.com/packages/hmrc/releases/play-json-union-formatter/images/download.svg) ](https://bintray.com/hmrc/releases/play-json-union-formatter/_latestVersion)
-
 A library for deriving a play-json formatter for a JSON-encoded [tagged union](https://en.wikipedia.org/wiki/Tagged_union).
 
 ## Adding to your build
@@ -9,8 +7,6 @@ A library for deriving a play-json formatter for a JSON-encoded [tagged union](h
 In your SBT build add:
 
 ```scala
-resolvers += Resolver.bintrayRepo("hmrc", "releases")
-
 libraryDependencies += "uk.gov.hmrc" %% "play-json-union-formatter" % "x.x.x"
 ```
 

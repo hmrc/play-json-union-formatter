@@ -26,15 +26,12 @@ lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     name := "play-json-union-formatter",
     majorVersion := 1,
     makePublicallyAvailableOnBintray := true,
     targetJvm := "jvm-1.8",
-    libraryDependencies ++= deps,
-    resolvers := Seq(
-      Resolver.bintrayRepo("hmrc", "releases")
-    )
+    libraryDependencies ++= deps
   )
 
 val testDepsShared: Seq[ModuleID] = Seq(
