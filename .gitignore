@@ -2,10 +2,8 @@
 !.gitignore
 
 logs
-project/project
-project/target
-project/metals.sbt
-target
+metals.sbt
+target/
 lib_managed
 tmp
 dist
@@ -15,4 +13,3 @@ dist
 /RUNNING_PID
 *.iws
 
-    

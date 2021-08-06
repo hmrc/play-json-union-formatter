@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.play.json
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json._
 
 
-class UnionSpec extends WordSpec with Matchers {
+class UnionSpec extends AnyWordSpec with Matchers {
 
   sealed trait UnionType
 
@@ -45,18 +46,18 @@ class UnionSpec extends WordSpec with Matchers {
   "Union.format w/ toJson" should {
 
     "serialise a member of the union type with the correct type field" in {
-      Json.toJson(MemberOne(10)) \ "typeField" shouldBe JsDefined(JsString("ONE"))
-      Json.toJson(MemberTwo("10")) \ "typeField" shouldBe JsDefined(JsString("TWO"))
+      Json.toJson[UnionType](MemberOne(10)) \ "typeField" shouldBe JsDefined(JsString("ONE"))
+      Json.toJson[UnionType](MemberTwo("10")) \ "typeField" shouldBe JsDefined(JsString("TWO"))
     }
 
     "serialise a member of the union type with the right fields" in {
-      Json.toJson(MemberOne(10)) \ "fieldOne" shouldBe JsDefined(JsNumber(10))
-      Json.toJson(MemberTwo("10")) \ "fieldTwo" shouldBe JsDefined(JsString("10"))
+      Json.toJson[UnionType](MemberOne(10)) \ "fieldOne" shouldBe JsDefined(JsNumber(10))
+      Json.toJson[UnionType](MemberTwo("10")) \ "fieldTwo" shouldBe JsDefined(JsString("10"))
     }
 
   }
 
-  "Union.format w/ toJson" should {
+  "Union.format w/ fromJson" should {
 
     "parse union member types successfully" in {
 
