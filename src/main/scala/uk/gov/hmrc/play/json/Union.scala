@@ -19,15 +19,15 @@ package uk.gov.hmrc.play.json
 import play.api.libs.json._
 import scala.reflect.ClassTag
 
-class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => JsResult[A]], writeWith: PartialFunction[A, JsValue]) {
+class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => JsResult[A]], writeWith: PartialFunction[A, JsObject]) {
 
-  def and[B](typeTag: String)(implicit ev: B <:< A, ct: ClassTag[B], f: Format[B]) = {
+  def and[B <: A](typeTag: String)(implicit ct: ClassTag[B], f: OFormat[B]) = {
     val readCase: PartialFunction[String, JsValue => JsResult[A]] = {
       case `typeTag` => jsValue: JsValue => Json.fromJson(jsValue)(f).asInstanceOf[JsResult[A]]
     }
 
-    val writeCase: PartialFunction[A, JsValue] = {
-      case value: B => Json.toJson(value)(f).as[JsObject] ++ JsObject(Seq(typeField -> JsString(typeTag)))
+    val writeCase: PartialFunction[A, JsObject] = {
+      case value: B => Json.toJsObject(value)(f) ++ Json.obj(typeField -> typeTag)
     }
 
     new Union(typeField, readWith.orElse(readCase), writeWith.orElse(writeCase))
@@ -37,14 +37,14 @@ class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => J
     case attemptedType => jsValue => JsError(__ \ typeField, s"$attemptedType is not a recognised $typeField")
   }
 
-  def format: Format[A] = {
+  def format: OFormat[A] = {
     val reads = Reads[A] { json =>
       (json \ typeField).validate[String].flatMap { typeTag =>
         readWith.orElse(defaultReads)(typeTag)(json)
       }
     }
-    val writes = Writes[A](writeWith)
-    Format(reads, writes)
+    val writes = OWrites[A](writeWith)
+    OFormat(reads, writes)
   }
 }
 

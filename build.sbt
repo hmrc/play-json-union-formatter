@@ -18,26 +18,25 @@ import sbt._
 import sbt.Keys._
 import uk.gov.hmrc.DefaultBuildSettings.targetJvm
 import uk.gov.hmrc.SbtAutoBuildPlugin
-import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 lazy val library = (project in file("."))
-  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning, SbtArtifactory)
+  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
-    scalaVersion := "2.12.12",
+    scalaVersion := "2.12.14",
     name := "play-json-union-formatter",
     majorVersion := 1,
-    makePublicallyAvailableOnBintray := true,
+    isPublicArtefact := true,
     targetJvm := "jvm-1.8",
     libraryDependencies ++= deps
   )
 
 val testDepsShared: Seq[ModuleID] = Seq(
-  "org.scalatest" %% "scalatest" % "3.0.8" % "test",
-  "org.pegdown"   %  "pegdown"   % "1.6.0" % "test",
-)
+  "org.scalatest" %% "scalatest" % "3.2.9",
+  "com.vladsch.flexmark" % "flexmark-all" % "0.36.8"
+).map(_ % Test)
 
 val compileDepsPlay26: Seq[ModuleID] = Seq(
   "com.typesafe.play" %% "play-json" % "2.6.14"
@@ -47,8 +46,13 @@ val compileDepsPlay27: Seq[ModuleID] = Seq(
   "com.typesafe.play" %% "play-json" % "2.7.4"
 )
 
+val compileDepsPlay28: Seq[ModuleID] = Seq(
+  "com.typesafe.play" %% "play-json" % "2.8.1"
+)
+
 val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
   play26 = compileDepsPlay26,
   play27 = compileDepsPlay27,
+  play28 = compileDepsPlay28,
   shared = testDepsShared
 )
