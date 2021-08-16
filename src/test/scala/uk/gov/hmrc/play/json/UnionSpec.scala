@@ -43,6 +43,29 @@ class UnionSpec extends AnyWordSpec with Matchers {
       .and[MemberTwo]("TWO")
       .format
 
+  sealed trait RecursiveUnion
+
+  case class Recursive(
+    fieldOne: String,
+    recursiveList: List[RecursiveUnion] = List.empty
+  ) extends RecursiveUnion
+
+  object Recursive {
+    implicit val format: OFormat[Recursive] = Json.format[Recursive]
+  }
+
+  case class NonRecursive(fieldTwo: Int) extends RecursiveUnion
+
+  object NonRecursive {
+    implicit val format: OFormat[NonRecursive] = Json.format[NonRecursive]
+  }
+
+  implicit val recursiveFormat: OFormat[RecursiveUnion] =
+    Union.from[RecursiveUnion]("typeField")
+      .and[NonRecursive]("NONRECURSIVE")
+      .andLazy[Recursive]("RECURSIVE", Recursive.format)
+      .format
+
   "Union.format w/ toJson" should {
 
     "serialise a member of the union type with the correct type field" in {
@@ -55,6 +78,15 @@ class UnionSpec extends AnyWordSpec with Matchers {
       Json.toJson[UnionType](MemberTwo("10")) \ "fieldTwo" shouldBe JsDefined(JsString("10"))
     }
 
+    "serialize a member of a recursive union type" in {
+      val recursiveJson = Json.toJson[RecursiveUnion](Recursive("10", List(NonRecursive(10))))
+      recursiveJson \ "typeField" shouldBe JsDefined(JsString("RECURSIVE"))
+      recursiveJson \ "fieldOne" shouldBe JsDefined(JsString("10"))
+      recursiveJson \ "recursiveList" shouldBe JsDefined(Json.arr(Json.obj("typeField" -> "NONRECURSIVE", "fieldTwo" -> 10)))
+
+      val nonRecursiveJson = Json.toJson[RecursiveUnion](NonRecursive(2))
+      nonRecursiveJson shouldBe Json.obj("typeField" -> "NONRECURSIVE", "fieldTwo" -> 2)
+    }
   }
 
   "Union.format w/ fromJson" should {
@@ -107,6 +139,33 @@ class UnionSpec extends AnyWordSpec with Matchers {
       val typePath = __ \ "typeField"
 
       Json.fromJson[UnionType](json) shouldBe JsError(typePath, "THREE is not a recognised typeField")
+    }
+
+    "parse recursive union types successfully" in {
+      val jsonOne = Json.parse(
+        """
+          |{
+          |  "typeField": "RECURSIVE",
+          |  "fieldOne": "ONE",
+          |  "recursiveList": [{
+          |    "typeField": "NONRECURSIVE",
+          |    "fieldTwo": 2
+          |  }]
+          |}
+        """.stripMargin
+      )
+
+      val jsonTwo = Json.parse(
+        """
+          |{
+          |  "typeField": "NONRECURSIVE",
+          |  "fieldTwo": 10
+          |}
+        """.stripMargin
+      )
+
+      Json.fromJson[RecursiveUnion](jsonOne).get shouldBe Recursive("ONE", List(NonRecursive(2)))
+      Json.fromJson[RecursiveUnion](jsonTwo).get shouldBe NonRecursive(10)
     }
   }
 }
