@@ -25,7 +25,7 @@ lazy val library = (project in file("."))
   .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
-    scalaVersion := "2.12.14",
+    scalaVersion := "2.13.8",
     name := "play-json-union-formatter",
     majorVersion := 1,
     isPublicArtefact := true,
@@ -34,24 +34,19 @@ lazy val library = (project in file("."))
   )
 
 val testDepsShared: Seq[ModuleID] = Seq(
-  "org.scalatest" %% "scalatest" % "3.2.9",
-  "com.vladsch.flexmark" % "flexmark-all" % "0.36.8"
+  "org.scalatest" %% "scalatest" % "3.2.13",
+  "com.vladsch.flexmark" % "flexmark-all" % "0.62.2"
 ).map(_ % Test)
-
-val compileDepsPlay26: Seq[ModuleID] = Seq(
-  "com.typesafe.play" %% "play-json" % "2.6.14"
-)
 
 val compileDepsPlay27: Seq[ModuleID] = Seq(
   "com.typesafe.play" %% "play-json" % "2.7.4"
 )
 
 val compileDepsPlay28: Seq[ModuleID] = Seq(
-  "com.typesafe.play" %% "play-json" % "2.8.1"
+  "com.typesafe.play" %% "play-json" % "2.8.2"
 )
 
 val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
-  play26 = compileDepsPlay26,
   play27 = compileDepsPlay27,
   play28 = compileDepsPlay28,
   shared = testDepsShared
