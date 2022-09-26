@@ -19,10 +19,8 @@ import sbt.Keys._
 import uk.gov.hmrc.DefaultBuildSettings.targetJvm
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
-import uk.gov.hmrc.versioning.SbtGitVersioning
 
 lazy val library = (project in file("."))
-  .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
     scalaVersion := "2.13.8",
