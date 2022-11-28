@@ -20,10 +20,18 @@ import uk.gov.hmrc.DefaultBuildSettings.targetJvm
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
+
+lazy val scala212 = "2.12.16"
+lazy val scala213 = "2.13.8"
+lazy val supportedScalaVersions = List(scala212, scala213)
+
 lazy val library = (project in file("."))
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
-    scalaVersion := "2.13.8",
+    crossScalaVersions := supportedScalaVersions,
+  )
+  .settings(
+    scalaVersion := scala213,
     name := "play-json-union-formatter",
     majorVersion := 1,
     isPublicArtefact := true,
