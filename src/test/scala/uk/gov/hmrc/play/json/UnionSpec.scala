@@ -20,7 +20,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json._
 
-
 class UnionSpec extends AnyWordSpec with Matchers {
 
   sealed trait UnionType
@@ -46,9 +45,9 @@ class UnionSpec extends AnyWordSpec with Matchers {
   sealed trait RecursiveUnion
 
   case class Recursive(
-    fieldOne: String,
-    recursiveList: List[RecursiveUnion] = List.empty
-  ) extends RecursiveUnion
+      fieldOne: String,
+      recursiveList: List[RecursiveUnion] = List.empty
+    ) extends RecursiveUnion
 
   object Recursive {
     implicit val format: OFormat[Recursive] = Json.format[Recursive]

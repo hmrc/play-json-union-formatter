@@ -41,7 +41,7 @@ class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => J
   }
 
   def format: OFormat[A] = {
-    val reads = Reads[A] { json =>
+    val reads  = Reads[A] { json =>
       (json \ typeField).validate[String].flatMap { typeTag =>
         readWith.orElse(defaultReads)(typeTag)(json)
       }
