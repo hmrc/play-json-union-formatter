@@ -2,6 +2,7 @@ import sbt._
 import sbt.Keys._
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
+lazy val appName = "play-json-union-formatter"
 
 lazy val scala212 = "2.12.16"
 lazy val scala213 = "2.13.8"
@@ -17,14 +18,14 @@ inThisBuild(
   )
 )
 
-lazy val library = (project in file("."))
+lazy val library = Project(appName, file("."))
   .settings(PlayCrossCompilation.playCrossCompilationSettings)
   .settings(
     crossScalaVersions := supportedScalaVersions,
   )
   .settings(
     scalaVersion := scala213,
-    name := "play-json-union-formatter",
+    name := appName,
     majorVersion := 1,
     isPublicArtefact := true,
     libraryDependencies ++= deps
