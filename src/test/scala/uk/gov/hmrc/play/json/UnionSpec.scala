@@ -18,6 +18,7 @@ package uk.gov.hmrc.play.json
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
 import play.api.libs.json._
 
 class UnionSpec extends AnyWordSpec with Matchers {

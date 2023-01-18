@@ -6,3 +6,4 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 addSbtPlugin("uk.gov.hmrc"    % "sbt-auto-build"              % "3.8.0")
 addSbtPlugin("uk.gov.hmrc"    % "sbt-play-cross-compilation"  % "2.3.0")
 addSbtPlugin("org.scalameta"  % "sbt-scalafmt"                % "2.4.6")
+addSbtPlugin("ch.epfl.scala"  % "sbt-scalafix"                % "0.10.2")

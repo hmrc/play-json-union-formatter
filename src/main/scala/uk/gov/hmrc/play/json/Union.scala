@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.play.json
 
-import play.api.libs.json._
 import scala.reflect.ClassTag
+
+import play.api.libs.json._
 
 class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => JsResult[A]], writeWith: PartialFunction[A, JsObject]) {
 
