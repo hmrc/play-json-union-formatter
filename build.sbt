@@ -1,7 +1,5 @@
 import sbt._
 import sbt.Keys._
-import uk.gov.hmrc.DefaultBuildSettings.targetJvm
-import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 
@@ -19,7 +17,6 @@ lazy val library = (project in file("."))
     name := "play-json-union-formatter",
     majorVersion := 1,
     isPublicArtefact := true,
-    targetJvm := "jvm-1.8",
     libraryDependencies ++= deps
   )
 
