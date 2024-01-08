@@ -32,14 +32,6 @@ lazy val library = Project(appName, file("."))
     isPublicArtefact := true,
     libraryDependencies ++= deps
   )
-  .settings(
-    scalacOptions ++= Seq(
-      "-Wconf:cat=unused&src=views/.*\\.scala:s",
-      "-Wconf:cat=unused&src=.*RoutesPrefix\\.scala:s",
-      "-Wconf:cat=unused&src=.*Routes\\.scala:s",
-      "-Wconf:cat=unused&src=.*ReverseRoutes\\.scala:s"
-    )
-  )
 
 val testDepsShared: Seq[ModuleID] = Seq(
   "org.scalatest" %% "scalatest" % "3.2.17",
