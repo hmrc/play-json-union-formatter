@@ -28,16 +28,16 @@ class UnionSpec extends AnyWordSpec with Matchers {
   case class MemberOne(fieldOne: Int) extends UnionType
 
   object MemberOne {
-    implicit val format = Json.format[MemberOne]
+    implicit val format: OFormat[MemberOne] = Json.format[MemberOne]
   }
 
   case class MemberTwo(fieldTwo: String) extends UnionType
 
   object MemberTwo {
-    implicit val format = Json.format[MemberTwo]
+    implicit val format: OFormat[MemberTwo] = Json.format[MemberTwo]
   }
 
-  implicit val format =
+  implicit val format: OFormat[UnionType] =
     Union.from[UnionType]("typeField")
       .and[MemberOne]("ONE")
       .and[MemberTwo]("TWO")
