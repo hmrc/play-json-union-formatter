@@ -1,1 +1,1 @@
-sbt clean scalastyle scalafmtAll scalafixAll test
+sbt pre-commit
