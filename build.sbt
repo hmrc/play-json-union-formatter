@@ -4,11 +4,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName = "play-json-union-formatter"
 
-lazy val scala212 = "2.12.16"
-lazy val scala213 = "2.13.8"
-lazy val supportedScalaVersions = List(scala212, scala213)
-
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+lazy val scala213 = "2.13.12"
 
 inThisBuild(
   List(
@@ -18,34 +14,21 @@ inThisBuild(
   )
 )
 
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+
 lazy val library = Project(appName, file("."))
-  .settings(PlayCrossCompilation.playCrossCompilationSettings)
-  .settings(
-    crossScalaVersions := supportedScalaVersions,
-  )
   .settings(
     scalaVersion := scala213,
     name := appName,
     majorVersion := 1,
     isPublicArtefact := true,
-    libraryDependencies ++= deps
+    libraryDependencies ++= LibraryDependencies()
   )
 
-val testDepsShared: Seq[ModuleID] = Seq(
-  "org.scalatest" %% "scalatest" % "3.2.13",
-  "com.vladsch.flexmark" % "flexmark-all" % "0.62.2"
-).map(_ % Test)
+commands ++= Seq(
+  Command.command("run-all-tests") { state => "test" :: state },
 
-val compileDepsPlay27: Seq[ModuleID] = Seq(
-  "com.typesafe.play" %% "play-json" % "2.7.4"
-)
+  Command.command("clean-and-test") { state => "clean" :: "compile" :: "run-all-tests" :: state },
 
-val compileDepsPlay28: Seq[ModuleID] = Seq(
-  "com.typesafe.play" %% "play-json" % "2.8.2"
-)
-
-val deps: Seq[ModuleID] = PlayCrossCompilation.dependencies(
-  play27 = compileDepsPlay27,
-  play28 = compileDepsPlay28,
-  shared = testDepsShared
+  Command.command("pre-commit") { state => "clean" :: "scalafmtAll" :: "scalafixAll" :: "run-all-tests" :: state }
 )
