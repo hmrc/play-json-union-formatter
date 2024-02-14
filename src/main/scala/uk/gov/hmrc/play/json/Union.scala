@@ -37,6 +37,22 @@ class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => J
   def and[B <: A](typeTag: String)(implicit ct: ClassTag[B], f: OFormat[B]) =
     andLazy(typeTag, f)
 
+  def andLazyType[B <: A](typeTag: String, fn: () => B)(implicit ct: ClassTag[B]) = {
+    val readCase: PartialFunction[String, JsValue => JsResult[A]] = {
+      case `typeTag` => _ => JsSuccess(fn())
+    }
+
+    val writeCase: PartialFunction[A, JsObject] = {
+      case value: B => Json.obj(typeField -> typeTag)
+    }
+
+    new Union(typeField, readWith.orElse(readCase), writeWith.orElse(writeCase))
+  }
+
+  def andType[B <: A](typeTag: String, fn: () => B)(implicit tt: ClassTag[B]) = {
+    andLazyType(typeTag, fn)
+  }
+
   private val defaultReads: PartialFunction[String, JsValue => JsResult[A]] = {
     case attemptedType => jsValue => JsError(__ \ typeField, s"$attemptedType is not a recognised $typeField")
   }

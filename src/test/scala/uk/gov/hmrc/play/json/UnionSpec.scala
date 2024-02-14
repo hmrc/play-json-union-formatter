@@ -23,24 +23,27 @@ import play.api.libs.json._
 
 class UnionSpec extends AnyWordSpec with Matchers {
 
-  sealed trait UnionType
+  sealed trait UnionedType
 
-  case class MemberOne(fieldOne: Int) extends UnionType
+  case class MemberOne(fieldOne: Int) extends UnionedType
 
   object MemberOne {
     implicit val format: OFormat[MemberOne] = Json.format[MemberOne]
   }
 
-  case class MemberTwo(fieldTwo: String) extends UnionType
+  case class MemberTwo(fieldTwo: String) extends UnionedType
 
   object MemberTwo {
     implicit val format: OFormat[MemberTwo] = Json.format[MemberTwo]
   }
 
-  implicit val format: OFormat[UnionType] =
-    Union.from[UnionType]("typeField")
+  case object MemberThree extends UnionedType
+  
+  implicit val format: OFormat[UnionedType] =
+    Union.from[UnionedType]("typeField")
       .and[MemberOne]("ONE")
       .and[MemberTwo]("TWO")
+      .andType[MemberThree.type]("THREE", () => MemberThree)
       .format
 
   sealed trait RecursiveUnion
@@ -69,13 +72,13 @@ class UnionSpec extends AnyWordSpec with Matchers {
   "Union.format w/ toJson" should {
 
     "serialise a member of the union type with the correct type field" in {
-      Json.toJson[UnionType](MemberOne(10)) \ "typeField" shouldBe JsDefined(JsString("ONE"))
-      Json.toJson[UnionType](MemberTwo("10")) \ "typeField" shouldBe JsDefined(JsString("TWO"))
+      Json.toJson[UnionedType](MemberOne(10)) \ "typeField" shouldBe JsDefined(JsString("ONE"))
+      Json.toJson[UnionedType](MemberTwo("10")) \ "typeField" shouldBe JsDefined(JsString("TWO"))
     }
 
     "serialise a member of the union type with the right fields" in {
-      Json.toJson[UnionType](MemberOne(10)) \ "fieldOne" shouldBe JsDefined(JsNumber(10))
-      Json.toJson[UnionType](MemberTwo("10")) \ "fieldTwo" shouldBe JsDefined(JsString("10"))
+      Json.toJson[UnionedType](MemberOne(10)) \ "fieldOne" shouldBe JsDefined(JsNumber(10))
+      Json.toJson[UnionedType](MemberTwo("10")) \ "fieldTwo" shouldBe JsDefined(JsString("10"))
     }
 
     "serialize a member of a recursive union type" in {
@@ -111,8 +114,8 @@ class UnionSpec extends AnyWordSpec with Matchers {
         """.stripMargin
       )
 
-      Json.fromJson[UnionType](jsonOne).get shouldBe MemberOne(999)
-      Json.fromJson[UnionType](jsonTwo).get shouldBe MemberTwo("String")
+      Json.fromJson[UnionedType](jsonOne).get shouldBe MemberOne(999)
+      Json.fromJson[UnionedType](jsonTwo).get shouldBe MemberTwo("String")
     }
 
     "refuse to parse a field without a typeField" in {
@@ -124,21 +127,21 @@ class UnionSpec extends AnyWordSpec with Matchers {
         """.stripMargin
       )
 
-      Json.fromJson[UnionType](json) shouldBe an[JsError]
+      Json.fromJson[UnionedType](json) shouldBe an[JsError]
     }
 
     "refuse to parse a typeField that isn't known" in {
       val json = Json.parse(
         """
           |{
-          |  "typeField": "THREE"
+          |  "typeField": "BOBBINS"
           |}
         """.stripMargin
       )
 
       val typePath = __ \ "typeField"
 
-      Json.fromJson[UnionType](json) shouldBe JsError(typePath, "THREE is not a recognised typeField")
+      Json.fromJson[UnionedType](json) shouldBe JsError(typePath, "BOBBINS is not a recognised typeField")
     }
 
     "parse recursive union types successfully" in {
