@@ -2,6 +2,8 @@
 
 A library for deriving a play-json formatter for a JSON-encoded [tagged union](https://en.wikipedia.org/wiki/Tagged_union).
 
+The library is designed as a dependency for API Platform services and is subject to significant change without notice.
+
 ## Adding to your build
 
 In your SBT build add:
