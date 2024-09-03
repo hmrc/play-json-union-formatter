@@ -24,7 +24,7 @@ class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => J
 
   def andLazy[B <: A](typeTag: String, fmt: => OFormat[B])(implicit ct: ClassTag[B]) = {
     val readCase: PartialFunction[String, JsValue => JsResult[A]] = {
-      case `typeTag` => jsValue: JsValue => Json.fromJson(jsValue)(fmt).asInstanceOf[JsResult[A]]
+      case `typeTag` => (jsValue: JsValue) => Json.fromJson(jsValue)(fmt).asInstanceOf[JsResult[A]]
     }
 
     val writeCase: PartialFunction[A, JsObject] = {
