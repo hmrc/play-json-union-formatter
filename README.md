@@ -12,12 +12,17 @@ In your SBT build add:
 libraryDependencies += "uk.gov.hmrc" %% "play-json-union-formatter" % "x.x.x"
 ```
 
+## Versioning
+Versions 2.0.0 and above require Scala 3 and support Play 3.
+
+Versions 1.x.x support Scala 2
+
 If your microservice is using Play 2.5, use version 1.7.0 or older. Versions > 1.7.0 only support Play 2.6 and above.  Versions > 1.15 support 2.8 and above.
 
-1.15 and earlier support scala 2.12
-1.16 supports Scala 2.13
-1.17 and above are cross compiled for scala 2.12 and 2.13
-
+1.15.0 and earlier support scala 2.12
+1.16.0 supports Scala 2.13
+1.17.0 and above are cross compiled for scala 2.12 and 2.13
+1.22.0 is the final version that supports Scala 2
 
 ## Usage
 

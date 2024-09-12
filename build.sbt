@@ -8,7 +8,7 @@ Global / bloopAggregateSourceDependencies := true
 Global / bloopExportJarClassifiers := Some(Set("sources"))
 
 ThisBuild / scalaVersion := "3.3.3"
-ThisBuild / majorVersion := 1
+ThisBuild / majorVersion := 2
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
