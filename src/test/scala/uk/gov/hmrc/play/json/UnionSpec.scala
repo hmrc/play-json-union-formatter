@@ -38,7 +38,7 @@ class UnionSpec extends AnyWordSpec with Matchers {
   }
 
   case object MemberThree extends UnionedType
-  
+
   implicit val format: OFormat[UnionedType] =
     Union.from[UnionedType]("typeField")
       .and[MemberOne]("ONE")
@@ -48,26 +48,41 @@ class UnionSpec extends AnyWordSpec with Matchers {
 
   sealed trait RecursiveUnion
 
-  case class Recursive(
-      fieldOne: String,
-      recursiveList: List[RecursiveUnion] = List.empty
-    ) extends RecursiveUnion
-
-  object Recursive {
-    implicit val format: OFormat[Recursive] = Json.format[Recursive]
-  }
-
   case class NonRecursive(fieldTwo: Int) extends RecursiveUnion
 
   object NonRecursive {
     implicit val format: OFormat[NonRecursive] = Json.format[NonRecursive]
   }
 
-  implicit val recursiveFormat: OFormat[RecursiveUnion] =
-    Union.from[RecursiveUnion]("typeField")
-      .and[NonRecursive]("NONRECURSIVE")
-      .andLazy[Recursive]("RECURSIVE", Recursive.format)
-      .format
+  case class Recursive(
+      fieldOne: String,
+      recursiveList: List[RecursiveUnion] = List.empty
+    ) extends RecursiveUnion
+
+  object Recursive {
+    import play.api.libs.functional.syntax._
+
+    implicit lazy val reads: Reads[Recursive] = (
+      (__ \ "fieldOne").read[String] and
+        (__ \ "recursiveList").lazyRead(Reads.list[RecursiveUnion](RecursiveUnion.format.reads(_)))
+    )(Recursive.apply _)
+
+    implicit lazy val writes: OWrites[Recursive] = (
+      (__ \ "fieldOne").write[String] and
+        (__ \ "recursiveList").lazyWrite(Writes.list[RecursiveUnion](RecursiveUnion.format.writes(_)))
+    )(r => Tuple.fromProductTyped(r))
+
+    implicit lazy val format: OFormat[Recursive] = OFormat[Recursive](reads, writes)
+  }
+
+  object RecursiveUnion {
+
+    implicit val format: OFormat[RecursiveUnion] =
+      Union.from[RecursiveUnion]("typeField")
+        .and[NonRecursive]("NONRECURSIVE")
+        .andLazy[Recursive]("RECURSIVE", Recursive.format)
+        .format
+  }
 
   "Union.format w/ toJson" should {
 
