@@ -24,7 +24,7 @@ class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => J
 
   def andLazy[B <: A](typeTag: String, fmt: => OFormat[B])(implicit ct: ClassTag[B]) = {
     val readCase: PartialFunction[String, JsValue => JsResult[A]] = {
-      case `typeTag` => jsValue: JsValue => Json.fromJson(jsValue)(fmt).asInstanceOf[JsResult[A]]
+      case `typeTag` => (jsValue: JsValue) => Json.fromJson(jsValue)(fmt).asInstanceOf[JsResult[A]]
     }
 
     val writeCase: PartialFunction[A, JsObject] = {
@@ -43,7 +43,7 @@ class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => J
     }
 
     val writeCase: PartialFunction[A, JsObject] = {
-      case value: B => Json.obj(typeField -> typeTag)
+      case _: B => Json.obj(typeField -> typeTag)
     }
 
     new Union(typeField, readWith.orElse(readCase), writeWith.orElse(writeCase))
@@ -54,7 +54,7 @@ class Union[A](typeField: String, readWith: PartialFunction[String, JsValue => J
   }
 
   private val defaultReads: PartialFunction[String, JsValue => JsResult[A]] = {
-    case attemptedType => jsValue => JsError(__ \ typeField, s"$attemptedType is not a recognised $typeField")
+    case attemptedType => _ => JsError(__ \ typeField, s"$attemptedType is not a recognised $typeField")
   }
 
   def format: OFormat[A] = {
