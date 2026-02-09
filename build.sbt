@@ -21,7 +21,7 @@ ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" 
 
 lazy val library = Project(appName, file("."))
   .settings(
-    // scalaVersion := scala3,
+    scalaVersion := scala3,
     name := appName,
     majorVersion := 1,
     isPublicArtefact := true,

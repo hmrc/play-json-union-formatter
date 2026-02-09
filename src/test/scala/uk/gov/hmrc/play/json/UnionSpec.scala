@@ -85,7 +85,11 @@ class UnionSpec extends AnyWordSpec with Matchers {
       val recursiveJson = Json.toJson[RecursiveUnion](Recursive("10", List(Recursive("11", List(NonRecursive(12))))))
       recursiveJson \ "typeField" shouldBe JsDefined(JsString("RECURSIVE"))
       recursiveJson \ "fieldOne" shouldBe JsDefined(JsString("10"))
-      recursiveJson \ "recursiveList" shouldBe JsDefined(Json.arr(Json.obj("typeField" -> "RECURSIVE", "fieldOne" -> "11", "recursiveList" -> Json.arr(Json.obj("typeField" ->  "NONRECURSIVE", "fieldTwo" -> 12)))))
+      recursiveJson \ "recursiveList" shouldBe JsDefined(Json.arr(Json.obj(
+        "typeField"     -> "RECURSIVE",
+        "fieldOne"      -> "11",
+        "recursiveList" -> Json.arr(Json.obj("typeField" -> "NONRECURSIVE", "fieldTwo" -> 12))
+      )))
 
       val nonRecursiveJson = Json.toJson[RecursiveUnion](NonRecursive(2))
       nonRecursiveJson shouldBe Json.obj("typeField" -> "NONRECURSIVE", "fieldTwo" -> 2)
