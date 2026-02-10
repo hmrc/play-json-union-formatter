@@ -4,21 +4,16 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName = "play-json-union-formatter"
 
-lazy val scala213 = "2.13.12"
+lazy val scala213 = "2.13.16"
+lazy val scala3 = "3.3.7"
 
-inThisBuild(
-  List(
-    scalaVersion := scala213,
-    semanticdbEnabled := true,
-    semanticdbVersion := scalafixSemanticdb.revision
-  )
-)
+ThisBuild / scalaVersion := scala213
 
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 
 lazy val library = Project(appName, file("."))
   .settings(
-    scalaVersion := scala213,
+    crossScalaVersions := Seq(scala213, scala3),
     name := appName,
     majorVersion := 1,
     isPublicArtefact := true,
@@ -26,9 +21,9 @@ lazy val library = Project(appName, file("."))
   )
 
 commands ++= Seq(
-  Command.command("run-all-tests") { state => "test" :: state },
+  Command.command("run-all-tests") { state => "+test" :: state },
 
-  Command.command("clean-and-test") { state => "clean" :: "compile" :: "run-all-tests" :: state },
+  Command.command("clean-and-test") { state => "+clean" :: "+compile" :: "run-all-tests" :: state },
 
-  Command.command("pre-commit") { state => "clean" :: "scalafmtAll" :: "scalafixAll" :: "run-all-tests" :: state }
+  Command.command("pre-commit") { state => "+clean" :: "+scalafmtAll" :: "+scalafixAll" :: "run-all-tests" :: state }
 )
