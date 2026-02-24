@@ -1,7 +1,7 @@
 .*
 !.gitignore
-!.scalafmt.conf
-!.scalafix.conf
+!.scalafmt*.conf
+!.scalafix*.conf
 
 logs
 metals.sbt
